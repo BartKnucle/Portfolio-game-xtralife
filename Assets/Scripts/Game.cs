@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Game : MonoBehaviour
 {
@@ -27,19 +28,11 @@ public class Game : MonoBehaviour
 
         _player.name = "Player0";
         _player.reset();
-
-        for (int i = 1; i < 4; i++)
-        {
-            Player player = GameObject.Instantiate(_player, transform.GetChild(1));
-            player.name = "Player" + i;
-            player.color = Colors[i];
-            player.index = i;
-            player.reset();
-        }
     }
 
     void Update () {
         time += Time.deltaTime;
+        GameObject.Find("/UI/game/score").GetComponent<Text>().text = time.ToString().Split(',')[0];
         _checkEndGame();
 
         if (Input.GetKey("space")) {
@@ -64,10 +57,7 @@ public class Game : MonoBehaviour
         //_map.generateMaze();
         _map.reset();
         transform.GetChild(3).GetComponent<Minimap>().reset();
-        for (int i = 0; i < 4; i++)
-        {
-            transform.GetChild(1).GetChild(i).GetComponent<Player>().reset();
-        }
+        transform.GetChild(1).GetChild(0).GetComponent<Player>().reset();
     }
 
     private void _checkEndGame() {

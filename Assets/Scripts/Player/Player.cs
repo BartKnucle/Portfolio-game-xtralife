@@ -188,7 +188,12 @@ public class Player : MonoBehaviour
     }
 
     public void reset() {
-        //Map map = transform.root.GetChild(0).GetComponent<Map>();
+        foreach (Transform ammos in GameObject.Find("/Area/Ammos").transform)
+        {
+          Destroy(ammos.gameObject);
+        }
+
+
         switch (index)
         {
             case 0:

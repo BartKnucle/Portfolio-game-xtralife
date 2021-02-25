@@ -5,11 +5,12 @@ using UnityEngine;
 public class BubbleGunAmmo : Ammo
 {
     private bool _isSticked = false;
-    private float _timeBeforeExplode = 3;
+    private float _timeBeforeExplode = 5;
 
     void Start()
     {
         Physics.IgnoreCollision(GetComponent<Collider>(), owner.GetComponent<Collider>(), true);
+        Physics.IgnoreLayerCollision(10, 8);
         GetComponent<Rigidbody>().AddForce(transform.forward * 5, ForceMode.Impulse);
         GetComponent<MeshRenderer>().material.SetColor("playerColor", owner.color);
     }
@@ -19,7 +20,7 @@ public class BubbleGunAmmo : Ammo
     {
          if (_isSticked) {
             _timeBeforeExplode -= Time.deltaTime;
-            transform.localScale = Vector3.one * ( 0.1f + _timeBeforeExplode - 3);
+            transform.localScale = Vector3.one * ( 0.1f + _timeBeforeExplode - 5);
             //GetComponent<MeshRenderer>().material = owner.mat;
         }
 
