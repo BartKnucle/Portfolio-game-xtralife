@@ -17,9 +17,10 @@ public class Cotc : MonoBehaviour
       } else {
         instance = this;
       }
+    }
 
+    public void init() {
       CotcGameObject _Cotc = gameObject.GetComponent<CotcGameObject>();
-
       _Cotc.GetCloud()
         .Catch(ex => {
             Debug.LogError(ex.ToString());
@@ -51,22 +52,35 @@ public class Cotc : MonoBehaviour
               });
           }
           else {
-              // Anonymous network type allows to log back with existing credentials
-              cloud.Login(
-                  "anonymous",
-                  networkId: PlayerPrefs.GetString("GamerId"),
-                  networkSecret: PlayerPrefs.GetString("GamerSecret"))
+            cloud.Login(
+                "anonymous",
+                networkId: PlayerPrefs.GetString("GamerId"),
+                networkSecret: PlayerPrefs.GetString("GamerSecret")
+                )
               .Catch(ex => Debug.LogError("Login failed: " + ex.ToString()))
               .Done(gamer => {
                   // ... (logged in)
                   DidLogin(gamer);
-              });
+            });
           }
         });
     }
 
     void DidLogin(Gamer newGamer) {
       gamer = newGamer;
+
+      // If profil is empty, fill it
+      gamer.Profile.Get()
+      .Catch(err => {
+        Debug.LogError(err);
+      })
+      .Done(profil => {
+        Debug.Log(profil["displayName"]);
+        if (profil["displayName"] == "Guest") {
+          GameObject.Find("/UI/newPlayer").GetComponent<Canvas>().enabled = true;
+        }
+      });
+
       // Another loop was running; unless you want to keep multiple users active, stop the previous
       if (Loop != null)
           Loop.Stop();
@@ -76,13 +90,5 @@ public class Cotc : MonoBehaviour
 
     void Loop_ReceivedEvent(DomainEventLoop sender, EventLoopArgs e) {
         Debug.Log("Received event of type " + e.Message.Type + ": " + e.Message.ToJson());
-    }
-
-    public void updateProfile(string displayName, string gender) {
-      Bundle profile = Bundle.CreateObject();
-      profile["displayName"] = displayName;
-      profile["gender"] = gender;
-
-      gamer.Profile.Set(profile);
     }
 }

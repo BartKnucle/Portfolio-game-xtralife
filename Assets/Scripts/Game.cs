@@ -41,6 +41,13 @@ public class Game : MonoBehaviour
     void Update () {
         time += Time.deltaTime;
         _checkEndGame();
+
+        if (Input.GetKey("space")) {
+            if (GameObject.Find("/UI/hello").GetComponent<Canvas>().enabled == true) {
+              GameObject.Find("/UI/hello").GetComponent<Canvas>().enabled = false;
+              Cotc.instance.init();
+            }
+        }
     }
     
     public void create(string id, int seed) {
