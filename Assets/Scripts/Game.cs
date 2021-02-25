@@ -15,11 +15,8 @@ public class Game : MonoBehaviour
     public float bestScore = 0;
 
     public List<Color> Colors = new List<Color>();
-    private bool _isTraining = false;
 
     public void Awake() {
-        _isTraining = GameObject.Find("/IA").GetComponent<ia>().isActiveAndEnabled == true;
-
         _map = transform.GetChild(0).GetComponent<Map>();
         _player = transform.GetChild(1).GetChild(0).GetComponent<Player>();
         _player.color = Colors[0];
@@ -59,7 +56,7 @@ public class Game : MonoBehaviour
         this.ID = "";
         //_map.generateMaze();
         _map.reset();
-        transform.GetChild(6).GetComponent<Minimap>().reset();
+        transform.GetChild(3).GetComponent<Minimap>().reset();
         for (int i = 0; i < 4; i++)
         {
             transform.GetChild(1).GetChild(i).GetComponent<Player>().reset();

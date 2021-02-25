@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Unity.MLAgents.Sensors;
 
+
 public class Player : MonoBehaviour
 {
 
@@ -22,7 +23,6 @@ public class Player : MonoBehaviour
     public int gridPositionX;
     public int gridPositionZ;
 
-    private Messages _messages;
     private Map _map;
     private Game _game;
 
@@ -36,7 +36,6 @@ public class Player : MonoBehaviour
 
     void Awake() {
         id = PlayerPrefs.GetString("_id");
-        _messages = transform.root.GetChild(5).GetComponent<Messages>(); //GameObject.Find("/Messages").GetComponent<Messages>();
         _map = transform.root.GetChild(0).GetComponent<Map>();
         _game = transform.root.GetComponent<Game>();
 
@@ -135,10 +134,6 @@ public class Player : MonoBehaviour
         //map.GetOwnerShip(this, gridPositionX, gridPositionZ);
 
         // Send the new if we are ingame
-        
-        if (_game.ID != "") {
-            _messages.dispatch("player/position/" + _game.ID + "/" + transform.localPosition.x + "/" + transform.localPosition.z);
-        }
     }
 
     private void _checkDestinations() {
@@ -164,11 +159,6 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void sendId() {
-        // Notify the server to replace the old id by the new one;
-        _messages.dispatch("player/sendId/" + id);
-    }
-
     public void addScore() {
         aiScore += 1;
         Game _game = transform.root.GetComponent<Game>();
@@ -176,7 +166,6 @@ public class Player : MonoBehaviour
             _game.bestScore = aiScore;
         }
         _game.addScore();
-        refreshScore();
     }
 
     public void rmScore() {
@@ -186,11 +175,6 @@ public class Player : MonoBehaviour
         }
         aiScore -= 1;
         _game.rmScore();
-        refreshScore();
-    }
-
-    private void refreshScore() {
-        GameObject.Find("txt" + name).GetComponent<Text>().text = aiScore.ToString();
     }
 
     // Is the player ower of the brick
