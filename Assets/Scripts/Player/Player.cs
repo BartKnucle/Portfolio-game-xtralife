@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Unity.MLAgents.Sensors;
-using CotcSdk;
-
 
 public class Player : MonoBehaviour
 {
@@ -137,15 +135,6 @@ public class Player : MonoBehaviour
         // Send the new if we are ingame
     }
 
-    private void _checkDestinations() {
-        float left = _map.getItem(gridPositionX - 1, gridPositionZ).GetComponent<Brick>().isAvailable() * isMine(gridPositionX - 1, gridPositionZ);
-        float right = _map.getItem(gridPositionX + 1, gridPositionZ).GetComponent<Brick>().isAvailable() * isMine(gridPositionX + 1, gridPositionZ);
-        float forward = _map.getItem(gridPositionX, gridPositionZ + 1).GetComponent<Brick>().isAvailable() * isMine(gridPositionX, gridPositionZ + 1);
-        float backward = _map.getItem(gridPositionX, gridPositionZ - 1).GetComponent<Brick>().isAvailable() * isMine(gridPositionX, gridPositionZ - 1);
-
-        aiDestinations = new Vector4(left, forward, right, backward);
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Floor")  {
@@ -188,12 +177,7 @@ public class Player : MonoBehaviour
     }
 
     public void reset() {
-        foreach (Transform ammos in GameObject.Find("/Area/Ammos").transform)
-        {
-          Destroy(ammos.gameObject);
-        }
-
-
+        //Map map = transform.root.GetChild(0).GetComponent<Map>();
         switch (index)
         {
             case 0:
@@ -234,21 +218,6 @@ public class Player : MonoBehaviour
         
         aiScore = 0;
         aicollisions = 0;
-        _checkDestinations();
-    }
-
-    public void updateProfile() {
-      Bundle profile = Bundle.CreateObject();
-      Debug.Log(GameObject.Find("/UI/newPlayer/pseudo/Text").GetComponent<Text>().text);
-      profile["displayName"] = GameObject.Find("/UI/newPlayer/pseudo/Text").GetComponent<Text>().text;
-
-      Cotc.instance.gamer.Profile.Set(profile)
-        .Catch(err => {
-          Debug.LogError(err);
-        })
-        .Done(user => {
-          GameObject.Find("/UI/newPlayer").GetComponent<Canvas>().enabled = false;
-        });
     }
 }
 

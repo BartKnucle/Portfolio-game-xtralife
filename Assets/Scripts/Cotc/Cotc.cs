@@ -7,6 +7,7 @@ public class Cotc : MonoBehaviour
 {
     // Singleton patern since juste one player
     public static Cotc instance;
+    public Cloud cloud;
     public Gamer gamer;
     DomainEventLoop Loop = null;
 
@@ -25,7 +26,8 @@ public class Cotc : MonoBehaviour
         .Catch(ex => {
             Debug.LogError(ex.ToString());
         })
-        .Done(cloud => {
+        .Done(_cloud => {
+          cloud = _cloud;
 
             // Http error request handler
             int[] RetryTimes = { 100 , 5000 };

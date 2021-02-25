@@ -86,11 +86,11 @@ public class Brick : MonoBehaviour
         }
     }
 
-    public float isAvailable () {
-        if (tag != "Wall") {
-            return 1;
+    public bool isWall () {
+        if (tag == "Wall") {
+            return true;
         } else {
-            return 0;
+            return false;
         }
     }
 }

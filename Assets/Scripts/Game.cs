@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using CotcSdk;
 
 public class Game : MonoBehaviour
 {
@@ -23,12 +24,12 @@ public class Game : MonoBehaviour
         _player.color = Colors[0];
     }
 
-    void Start() {
+    /*void Start() {
         _map.generateMaze();
 
         _player.name = "Player0";
         _player.reset();
-    }
+    }*/
 
     void Update () {
         time += Time.deltaTime;
@@ -49,15 +50,15 @@ public class Game : MonoBehaviour
     }
 
     public void reset() {
-        time = 0;
-        totalScore = 0;
-        maxScore = 0;
-        bestScore = 0;
-        this.ID = "";
-        //_map.generateMaze();
-        _map.reset();
-        transform.GetChild(3).GetComponent<Minimap>().reset();
-        transform.GetChild(1).GetChild(0).GetComponent<Player>().reset();
+      time = 0;
+      totalScore = 0;
+      maxScore = 0;
+      bestScore = 0;
+      this.ID = "";
+      //_map.generateMaze();
+      _map.reset();
+      transform.GetChild(3).GetComponent<Minimap>().reset();
+      transform.GetChild(1).GetChild(0).GetComponent<Player>().reset();
     }
 
     private void _checkEndGame() {
