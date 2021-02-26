@@ -33,6 +33,7 @@ public class Player : MonoBehaviour
     public int aicollisions = 0;
 
     public Vector4 aiDestinations = new Vector4(0, 0, 0, 0);
+    string playerName = "";
 
     void Awake() {
         id = PlayerPrefs.GetString("_id");
@@ -62,6 +63,9 @@ public class Player : MonoBehaviour
     }
 
     void Update() {
+        if (playerName == "" && Cotc.instance.gamer != null) {
+            getName();
+        }
         // Rotate
         if (Input.GetKey("left")) {
             //transform.Rotate(new Vector3(0, -Time.deltaTime * speed * 50, 0));
@@ -231,5 +235,21 @@ public class Player : MonoBehaviour
         .Done((profile) => {
             GameObject.Find("/UI/newPlayer").GetComponent<Canvas>().enabled = false;
         });
+    }
+
+    public void getName() {
+        // If profil is empty, fill it
+      Cotc.instance.gamer.Profile.Get()
+      .Catch(err => {
+        Debug.LogError(err);
+      })
+      .Done(profil => {
+        playerName = profil["displayName"];
+        if (playerName == "Guest") {
+          GameObject.Find("/UI/newPlayer").GetComponent<Canvas>().enabled = true;
+        } else {
+          GameObject.Find("/UI/game/playerName").GetComponent<Text>().text = playerName;
+        }
+      });
     }
 }

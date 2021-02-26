@@ -71,18 +71,6 @@ public class Cotc : MonoBehaviour
     void DidLogin(Gamer newGamer) {
       gamer = newGamer;
 
-      // If profil is empty, fill it
-      gamer.Profile.Get()
-      .Catch(err => {
-        Debug.LogError(err);
-      })
-      .Done(profil => {
-        Debug.Log(profil["displayName"]);
-        if (profil["displayName"] == "Guest") {
-          GameObject.Find("/UI/newPlayer").GetComponent<Canvas>().enabled = true;
-        }
-      });
-
       // Another loop was running; unless you want to keep multiple users active, stop the previous
       if (Loop != null)
           Loop.Stop();
