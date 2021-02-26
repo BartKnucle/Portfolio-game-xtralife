@@ -50,6 +50,7 @@ public class Game : MonoBehaviour
     }
 
     public void reset() {
+      postScore((long)time);
       time = 0;
       totalScore = 0;
       maxScore = 0;
@@ -62,7 +63,7 @@ public class Game : MonoBehaviour
     }
 
     private void _checkEndGame() {
-        if (totalScore == maxScore) {
+        if (totalScore == maxScore && totalScore != 0) {
             reset();
         }
     }
@@ -75,6 +76,21 @@ public class Game : MonoBehaviour
     public void rmScore() {
         totalScore += 1;
         //_checkEndGame();
+    }
+
+    void postScore(long score)
+    {
+        // currentGamer is an object retrieved after one of the different Login functions.
+
+        Cotc.instance.gamer.Scores.Domain("private").Post(score, "intermediateMode", ScoreOrder.HighToLow,
+        "context for score", false)
+        .Done(postScoreRes => {
+            Debug.Log("Post score: " + postScoreRes.ToString());
+        }, ex => {
+            // The exception should always be CotcException
+            CotcException error = (CotcException)ex;
+            Debug.LogError("Could not post score: " + error.ErrorCode + " (" + error.ErrorInformation + ")");
+        });
     }
 }
 
