@@ -1017,7 +1017,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 666018426852248326}
-        m_MethodName: updateProfile
+        m_MethodName: updateStatus
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

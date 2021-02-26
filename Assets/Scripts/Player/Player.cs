@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Unity.MLAgents.Sensors;
+using CotcSdk;
 
 public class Player : MonoBehaviour
 {
@@ -219,5 +220,16 @@ public class Player : MonoBehaviour
         aiScore = 0;
         aicollisions = 0;
     }
-}
 
+    public void updateStatus() {
+        Bundle profileUpdates = Bundle.CreateObject();
+        profileUpdates["displayName"] = new Bundle(GameObject.Find("/UI/newPlayer/pseudo/Text").GetComponent<Text>().text);
+        Cotc.instance.gamer.Profile.Set(profileUpdates)
+        .Catch(err => {
+            Debug.LogError(err);
+        })
+        .Done((profile) => {
+            GameObject.Find("/UI/newPlayer").GetComponent<Canvas>().enabled = false;
+        });
+    }
+}
