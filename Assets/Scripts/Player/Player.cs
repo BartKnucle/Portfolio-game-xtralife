@@ -36,6 +36,7 @@ public class Player : MonoBehaviour
     string playerName = "";
 
     void Awake() {
+        Cotc.instance.cotcStarted.AddListener(getName);
         id = PlayerPrefs.GetString("_id");
         _map = transform.root.GetChild(0).GetComponent<Map>();
         _game = transform.root.GetComponent<Game>();
@@ -51,7 +52,7 @@ public class Player : MonoBehaviour
         //transform.GetComponent<CameraSensor>().Camera = transform.root.GetChild(6).GetChild(0).GetComponent<Camera>();
     }
 
-    void start () {
+    void Start () {
         gridPositionX = 0;
         gridPositionZ = 0;
         reset();
@@ -63,9 +64,6 @@ public class Player : MonoBehaviour
     }
 
     void Update() {
-        if (playerName == "" && Cotc.instance.gamer != null) {
-            getName();
-        }
         // Rotate
         if (Input.GetKey("left")) {
             //transform.Rotate(new Vector3(0, -Time.deltaTime * speed * 50, 0));
@@ -156,18 +154,10 @@ public class Player : MonoBehaviour
 
     public void addScore() {
         aiScore += 1;
-        Game _game = transform.root.GetComponent<Game>();
-        if (aiScore > _game.bestScore) {
-            _game.bestScore = aiScore;
-        }
         _game.addScore();
     }
 
     public void rmScore() {
-        Game _game = transform.root.GetComponent<Game>();
-        if (aiScore == _game.bestScore) {
-            _game.bestScore -= 1;
-        }
         aiScore -= 1;
         _game.rmScore();
     }
@@ -233,7 +223,9 @@ public class Player : MonoBehaviour
             Debug.LogError(err);
         })
         .Done((profile) => {
+            GameObject.Find("/UI/game/playerName").GetComponent<Text>().text = GameObject.Find("/UI/newPlayer/pseudo/Text").GetComponent<Text>().text;
             GameObject.Find("/UI/newPlayer").GetComponent<Canvas>().enabled = false;
+            GameObject.Find("/UI/warmup").GetComponent<Canvas>().enabled = true;
         });
     }
 
@@ -249,6 +241,7 @@ public class Player : MonoBehaviour
           GameObject.Find("/UI/newPlayer").GetComponent<Canvas>().enabled = true;
         } else {
           GameObject.Find("/UI/game/playerName").GetComponent<Text>().text = playerName;
+          GameObject.Find("/UI/warmup").GetComponent<Canvas>().enabled = true;
         }
       });
     }

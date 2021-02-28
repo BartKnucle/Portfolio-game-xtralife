@@ -5,7 +5,7 @@ using UnityEngine;
 public class BubbleGunAmmo : Ammo
 {
     private bool _isSticked = false;
-    private float _timeBeforeExplode = 3;
+    private float _timeBeforeExplode = 6;
 
     void Start()
     {
@@ -19,7 +19,7 @@ public class BubbleGunAmmo : Ammo
     {
          if (_isSticked) {
             _timeBeforeExplode -= Time.deltaTime;
-            transform.localScale = Vector3.one * ( 0.1f + _timeBeforeExplode - 3);
+            transform.localScale = Vector3.one * ( 0.1f + _timeBeforeExplode - 6);
             //GetComponent<MeshRenderer>().material = owner.mat;
         }
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using CotcSdk;
 
 public class Cotc : MonoBehaviour
@@ -9,7 +10,8 @@ public class Cotc : MonoBehaviour
     public static Cotc instance;
     public Cloud cloud;
     public Gamer gamer;
-    DomainEventLoop Loop = null;
+    public  UnityEvent cotcStarted = new UnityEvent();
+    //DomainEventLoop Loop = null;
 
     void Awake() {
       // Singleton instanciation
@@ -18,6 +20,10 @@ public class Cotc : MonoBehaviour
       } else {
         instance = this;
       }
+    }
+
+    void Start() {
+      Cotc.instance.init();
     }
 
     public void init() {
@@ -70,15 +76,16 @@ public class Cotc : MonoBehaviour
 
     void DidLogin(Gamer newGamer) {
       gamer = newGamer;
+      cotcStarted.Invoke();
 
       // Another loop was running; unless you want to keep multiple users active, stop the previous
-      if (Loop != null)
-          Loop.Stop();
-      Loop = gamer.StartEventLoop();
-      Loop.ReceivedEvent += Loop_ReceivedEvent;
+      /*if (Loop != null)
+          Loop.Stop();*/
+      //Loop = gamer.StartEventLoop();
+      //Loop.ReceivedEvent += Loop_ReceivedEvent;
     }
 
-    void Loop_ReceivedEvent(DomainEventLoop sender, EventLoopArgs e) {
+    /*void Loop_ReceivedEvent(DomainEventLoop sender, EventLoopArgs e) {
         Debug.Log("Received event of type " + e.Message.Type + ": " + e.Message.ToJson());
-    }
+    }*/
 }
